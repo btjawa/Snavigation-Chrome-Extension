@@ -1,3 +1,8 @@
+// IE Out
+if ( /*@cc_on!@*/ false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href =
+    "https://www.imsyy.top/upgrade-your-browser/index.html?referrer=" + encodeURIComponent(window.location
+    .href);
+
 //加载完成后执行
 window.addEventListener('load', function () {
     //载入动画
@@ -84,6 +89,7 @@ function time() {
     }
     $("#time_text").html(h + '<span id="point">:</span>' + m + '<span id="point">:</span>' + s);
     $("#day").html(mm + "&nbsp;月&nbsp;" + d + "&nbsp;日&nbsp;" + weekday[day]);
+    $("#foot-year").html(' - ' + (new Date()).getFullYear());
     t = setTimeout(time, 1000);
 }
 

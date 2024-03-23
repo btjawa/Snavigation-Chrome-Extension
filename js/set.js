@@ -237,10 +237,10 @@ function setBgImgInit() {
             $('#bg').attr('src', 'https://api.dujin.org/bing/1920.php') //必应每日
             break;
         case "3":
-            $('#bg').attr('src', 'https://api.ixiaowai.cn/gqapi/gqapi.php') //随机风景
+            $('#bg').attr('src', 'https://api.dujin.org/pic/fengjing') //随机风景
             break;
         case "4":
-            $('#bg').attr('src', 'https://api.ixiaowai.cn/api/api.php') //随机二次元
+            $('#bg').attr('src', 'https://www.dmoe.cc/random.php') //随机二次元
             break;
         case "5":
             $('#bg').attr('src', bg_img["path"]) //自定义
@@ -266,27 +266,26 @@ function blurWd() {
 function keywordReminder() {
     var keyword = $(".wd").val();
     if (keyword != "") {
-        $.ajax({
-            url: 'https://suggestion.baidu.com/su?wd=' + keyword,
-            dataType: 'jsonp',
-            jsonp: 'cb', //回调函数的参数名(键值)key
-            success: function (data) {
-                //获取宽度
-                $("#keywords").css("width", $('.sou').width());
-                $("#keywords").empty().show();
-                $.each(data.s, function (i, val) {
-                    $('#keywords').append(`<div class="keyword" data-id="${i + 1}"><i class='iconfont icon-sousuo'></i>${val}</div>`);
-                });
-                $("#keywords").attr("data-length", data.s["length"]);
-                $(".keyword").click(function () {
-                    $(".wd").val($(this).text());
-                    $("#search-submit").click();
-                });
-            },
-            error: function () {
-                $("#keywords").empty().show();
-                $("#keywords").hide();
-            }
+        //不再使用ajax，规避CSP问题
+        fetch('https://suggestion.baidu.com/su?wd=' + keyword + '&cb=window.baidu.sug', { credentials: 'omit' })
+        .then(async sug => {
+            const raw = (new TextDecoder('gbk')).decode(await sug.arrayBuffer());
+            const data = JSON.parse(raw.match(/window\.baidu\.sug\(\{.*?s:(\[[^\]]*\]).*?\}\);/)[1]);
+            //获取宽度
+            $("#keywords").css("width", $('.sou').width());
+            $("#keywords").empty().show();
+            $.each(data, function (i, val) {
+                $('#keywords').append(`<div class="keyword" data-id="${i + 1}"><i class='iconfont icon-sousuo'></i>${val}</div>`);
+            });
+            $("#keywords").attr("data-length", data.length);
+            $(".keyword").click(function () {
+                $(".wd").val($(this).text());
+                $("#search-submit").click();
+            });
+        }).catch(err => {
+            console.error(err);
+            $("#keywords").empty().show();
+            $("#keywords").hide();
         })
     } else {
         $("#keywords").empty().show();

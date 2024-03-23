@@ -8,7 +8,7 @@
     <title>Snavigation</title>
     <link rel="icon" href="favicon.ico">
     <!-- jQuery -->
-    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/font.css">
@@ -16,15 +16,9 @@
     <link rel="stylesheet" type="text/css" href="./css/mobile.css">
     <link rel="stylesheet" type="text/css" href="./css/animation.css">
     <!-- Izitoast -->
-    <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-y/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" href="./css/iziToast.min.css">
     <script type="text/javascript"
-        src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/izitoast/1.4.0/js/iziToast.min.js">
-    </script>
-    <!-- IE Out -->
-    <script>
-        if ( /*@cc_on!@*/ false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href =
-            "https://www.imsyy.top/upgrade-your-browser/index.html?referrer=" + encodeURIComponent(window.location
-            .href);
+        src="./js/iziToast.min.js">
     </script>
 </head>
 
@@ -540,10 +534,8 @@
         </div>
         <!-- 版权信息 -->
         <div class="foot">
-            <div class="power">Copyright&nbsp;&copy;&nbsp;2020
-                <script>
-                    document.write(' - ' + (new Date()).getFullYear())
-                </script>&nbsp;<a href="https://imsyy.top">白弹汲 & 無名</a>&nbsp;&amp;
+            <div class="power">Copyright&nbsp;&copy;&nbsp;2020<span id="foot-year"></span>
+                <a href="https://imsyy.top">白弹汲 & 無名</a>&nbsp;&amp;
                 <!-- 以下信息请不要修改哦 -->
                 Made&nbsp;by&nbsp;<a href="https://github.com/imsyy/Snavigation" target="_blank">imsyy</a>&nbsp;&amp;
                 Modified&nbsp;by&nbsp;<a href="https://github.com/btjawa/Snavigation-Chrome-Extension" target="_blank">btjawa</a>
