@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Snagigation-Chrome",
     "version": "1.1",
-    "description": "Chrome扩展版本 - Snavigation 一个简约的起始页 | 支持自定义搜索引擎，自定义快捷方式，自定义壁纸以及数据备份",
+    "description": "Snavigation 一个简约的起始页",
     "icons": {
         "32": "img/icon/favicon_32.png",
         "64": "img/icon/favicon_64.png",
