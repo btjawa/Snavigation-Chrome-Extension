@@ -186,6 +186,12 @@ var content = `
 更新日期：2022-07-12
 
 Github:  https://github.com/imsyy/Snavigation
+
+-----
+
+由 白弹汲 / btjawa 制作 Chrome 扩展版本
+
+Github:  https://github.com/btjawa/Snavigation-Chrome-Extension
 `
 console.log(`%c${title1} %c${title2}
 %c${content}`, styleTitle1, styleTitle2, styleContent)
