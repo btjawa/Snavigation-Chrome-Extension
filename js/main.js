@@ -72,29 +72,50 @@ function time() {
     var day = dt.getDay();
     var h = dt.getHours();
     var m = dt.getMinutes();
+    var s = dt.getSeconds();
     if (h < 10) {
         h = "0" + h;
     }
     if (m < 10) {
         m = "0" + m;
     }
-    $("#time_text").html(h + '<span id="point">:</span>' + m);
+    if (s < 10) {
+        s = "0" + s;
+    }
+    $("#time_text").html(h + '<span id="point">:</span>' + m + '<span id="point">:</span>' + s);
     $("#day").html(mm + "&nbsp;月&nbsp;" + d + "&nbsp;日&nbsp;" + weekday[day]);
     t = setTimeout(time, 1000);
 }
 
 //获取天气
-//每日限量 100 次
-//请前往 https://www.tianqiapi.com/index/doc?version=v6 申请（免费）
-fetch('https://yiketianqi.com/api?unescape=1&version=v6&appid=43986679&appsecret=TksqGZT7')
-    .then(response => response.json())
-    .then(data => {
-        //$('#wea_text').html(data.wea + '&nbsp;' + data.tem_night + '℃' + '&nbsp;~&nbsp;' + data.tem_day + '℃')
-        $('#wea_text').text(data.wea)
-        $('#tem1').text(data.tem1)
-        $('#tem2').text(data.tem2)
+//https://lbs.amap.com/api/webservice/guide/api/weatherinfo
+const key = "fb80502f02fa93ceb1dcaafc1a780bd5";
+fetch('https://restapi.amap.com/v3/ip?key=' + key)
+.then(async ip => {
+    const res = await ip.json();
+    const adcode = res?.adcode;
+    $("#city_text").html(res?.city);
+    fetch('https://restapi.amap.com/v3/weather/weatherInfo?key=' + key + '&city=' + adcode)
+    .then(async info => {
+        const res = await info.json();
+        if (res.status) {
+            $("#wea_text").html(res.lives[0].weather);
+            $("#tem_text").html(res.lives[0].temperature + "°C&nbsp;");
+            $("#win_text").html(res.lives[0].winddirection + "风");
+            $("#win_speed").html(res.lives[0].windpower + "级");
+            $("#humidity").html(res.lives[0].humidity);
+        } else {
+            console.error("天气信息获取失败");
+            iziToast.show({
+                timeout: 2000,
+                icon: "fa-solid fa-cloud-sun",
+                message: "天气信息获取失败",
+            });
+        }
     })
-    .catch(console.error)
+    .catch(console.error);
+})
+.catch(console.error);
     
 //Tab书签页
 $(function () {

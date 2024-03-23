@@ -229,6 +229,7 @@ img.error {
 
 /*天气*/
 .weather {
+    text-align: center;
     color: #efefef;
     opacity: 0.8;
     font-size: 1.10rem;
