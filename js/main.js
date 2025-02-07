@@ -188,7 +188,7 @@ var title2 = `
 |_____|_|  |_|_____/   |_|      |_|                                                     
 `
 var content = `
-版 本 号：1.1
+版 本 号：1.2
 更新日期：2025-02-08
 
 Github:  https://github.com/imsyy/Snavigation
