@@ -258,39 +258,6 @@ function blurWd() {
     $("body").removeClass("onsearch");
     //隐藏输入
     $(".wd").val("");
-    //隐藏搜索建议
-    $("#keywords").hide();
-}
-
-// 搜索建议提示
-function keywordReminder() {
-    var keyword = $(".wd").val();
-    if (keyword != "") {
-        //不再使用ajax，规避CSP问题
-        fetch('https://suggestion.baidu.com/su?wd=' + keyword + '&cb=window.baidu.sug', { credentials: 'omit' })
-        .then(async sug => {
-            const raw = (new TextDecoder('gbk')).decode(await sug.arrayBuffer());
-            const data = JSON.parse(raw.match(/window\.baidu\.sug\(\{.*?s:(\[[^\]]*\]).*?\}\);/)[1]);
-            //获取宽度
-            $("#keywords").css("width", $('.sou').width());
-            $("#keywords").empty().show();
-            $.each(data, function (i, val) {
-                $('#keywords').append(`<div class="keyword" data-id="${i + 1}"><i class='iconfont icon-sousuo'></i>${val}</div>`);
-            });
-            $("#keywords").attr("data-length", data.length);
-            $(".keyword").click(function () {
-                $(".wd").val($(this).text());
-                $("#search-submit").click();
-            });
-        }).catch(err => {
-            console.error(err);
-            $("#keywords").empty().show();
-            $("#keywords").hide();
-        })
-    } else {
-        $("#keywords").empty().show();
-        $("#keywords").hide();
-    }
 }
 
 // 搜索框数据加载
@@ -551,10 +518,6 @@ $(document).ready(function () {
             }
         }
 
-        // 自动提示隐藏
-        if (!$(".sou").is(e.target) && $(".sou").has(e.target).length === 0) {
-            $("#keywords").hide();
-        }
     });
 
     // 时间点击
@@ -598,7 +561,6 @@ $(document).ready(function () {
 
     $(document).on('click', '.wd', function () {
         focusWd();
-        keywordReminder();
         $(".search-engine").slideUp(160);
     });
 
@@ -607,61 +569,6 @@ $(document).ready(function () {
         blurWd();
         closeSet();
     });
-
-    // 点击搜索引擎时隐藏自动提示
-    $(document).on('click', '.se', function () {
-        $('#keywords').toggle();
-    });
-
-    // 恢复自动提示
-    $(document).on('click', '.se-li', function () {
-        $('#keywords').show();
-    });
-
-    // 自动提示 (调用百度 api）
-    $('.wd').keyup(function (event) {
-        var key = event.keyCode;
-        // 屏蔽上下键
-        var shieldKey = [38, 40];
-        if (shieldKey.includes(key)) return;
-        keywordReminder();
-    });
-
-    // 点击自动提示的搜索建议
-    $("#keywords").on("click", ".wd", function () {
-        var wd = $(this).text();
-        $(".wd").val(wd);
-        $(".search").submit();
-        //隐藏输入
-        $(".wd").val("");
-        $("#keywords").hide();
-    });
-
-    // 自动提示键盘方向键选择操作
-    $(".wd").keydown(function (event) { //上下键获取焦点
-        var key = event.keyCode;
-        if ($.trim($(this).val()).length === 0) return;
-
-        var id = $(".choose").attr("data-id");
-        if (id === undefined) id = 0;
-
-        if (key === 38) {
-            /*向上按钮*/
-            id--;
-        } else if (key === 40) {
-            /*向下按钮*/
-            id++;
-        } else {
-            return;
-        }
-        var length = $("#keywords").attr("data-length");
-        if (id > length) id = 1;
-        if (id < 1) id = length;
-
-        $(".keyword[data-id=" + id + "]").addClass("choose").siblings().removeClass("choose");
-        $(".wd").val($(".keyword[data-id=" + id + "]").text());
-    });
-
     // 菜单点击
     $("#menu").click(function () {
         if ($(this).attr("class") === "on") {

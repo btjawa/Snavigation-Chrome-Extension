@@ -11,8 +11,5 @@
     },
     "chrome_url_overrides": {
         "newtab": "index.html"
-    },
-    "host_permissions": [
-        "https://suggestion.baidu.com/su"
-    ]
+    }
 }

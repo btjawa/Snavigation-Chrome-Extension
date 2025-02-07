@@ -189,7 +189,7 @@ var title2 = `
 `
 var content = `
 版 本 号：1.1
-更新日期：2022-07-12
+更新日期：2025-02-08
 
 Github:  https://github.com/imsyy/Snavigation
 

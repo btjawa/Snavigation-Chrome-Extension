@@ -409,54 +409,6 @@ img.error {
 
 }
 
-/*搜索建议*/
-#keywords {
-    position: absolute;
-    width: 100%;
-    top: 46.5%;
-    font-size: small;
-    color: var(--main-text-color);
-    background-color: var(--main-background-color);
-    box-shadow: var(--main-search-shadow);
-    border-radius: 8px;
-    display: none;
-    z-index: 999;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    animation: down;
-    -webkit-animation: down 0.5s;
-    -moz-animation: down 0.5s;
-    -o-animation: down 0.5s;
-    -ms-animation: down 0.5s;
-}
-
-.keyword {
-    padding: 6px 12px;
-    border-radius: 8px;
-    transition: 0.3s;
-    animation: fade;
-    -webkit-animation: fade 0.5s;
-    -moz-animation: fade 0.5s;
-    -o-animation: fade 0.5s;
-    -ms-animation: fade 0.5s;
-}
-
-.keyword i {
-    margin-right: 6px;
-    font-size: small;
-}
-
-.keyword:hover,
-.keyword.choose {
-    cursor: pointer;
-    /* font-weight: bold; */
-    transition: 0.3s;
-    text-indent: 10px;
-    border-radius: 8px;
-    background-color: var(--main-background-hover-color);
-    border-radius: 8px;
-}
-
 /*书签及设置*/
 .mark,
 .set {
