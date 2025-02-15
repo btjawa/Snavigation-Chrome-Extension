@@ -12,88 +12,12 @@ github：https://github.com/yeetime/sou2
 由 imsyy 二次修改
 github：https://github.com/imsyy/sou2
 日期：2022-03-10
+========================================
+由 btjawa 二次修改
+github：https://github.com/btjawa/Snavigation-Chrome-Extension
+日期：2025-02-15
+修改cookies api为chrome.storage api，删除搜索引擎选择，使用chrome.search api
 */
-
-// 默认搜索引擎列表
-var se_list_preinstall = {
-    '1': {
-        id: 1,
-        title: "百度",
-        url: "https://www.baidu.com/s",
-        name: "wd",
-        icon: "iconfont icon-baidu",
-    },
-    '2': {
-        id: 2,
-        title: "必应",
-        url: "https://cn.bing.com/search",
-        name: "q",
-        icon: "iconfont icon-bing",
-    },
-    '3': {
-        id: 3,
-        title: "谷歌",
-        url: "https://www.google.com/search",
-        name: "q",
-        icon: "iconfont icon-google",
-    },
-    '4': {
-        id: 4,
-        title: "搜狗",
-        url: "https://www.sogou.com/web",
-        name: "query",
-        icon: "iconfont icon-sougousousuo",
-    },
-    '5': {
-        id: 5,
-        title: "360",
-        url: "https://www.so.com/s",
-        name: "q",
-        icon: "iconfont icon-360sousuo",
-    },
-    '6': {
-        id: 6,
-        title: "微博",
-        url: "https://s.weibo.com/weibo",
-        name: "q",
-        icon: "iconfont icon-xinlangweibo",
-    },
-    '7': {
-        id: 7,
-        title: "知乎",
-        url: "https://www.zhihu.com/search",
-        name: "q",
-        icon: "iconfont icon-zhihu",
-    },
-    '8': {
-        id: 8,
-        title: "Github",
-        url: "https://github.com/search",
-        name: "q",
-        icon: "iconfont icon-github",
-    },
-    '9': {
-        id: 9,
-        title: "BiliBili",
-        url: "https://search.bilibili.com/all",
-        name: "keyword",
-        icon: "iconfont icon-bilibilidonghua",
-    },
-    '10': {
-        id: 10,
-        title: "淘宝",
-        url: "https://s.taobao.com/search",
-        name: "q",
-        icon: "iconfont icon-taobao",
-    },
-    '11': {
-        id: 11,
-        title: "京东",
-        url: "https://search.jd.com/Search",
-        name: "keyword",
-        icon: "iconfont icon-jingdong",
-    }
-};
 
 // 默认快捷方式
 var quick_list_preinstall = {
@@ -147,34 +71,6 @@ var quick_list_preinstall = {
     }
 };
 
-// 获取搜索引擎列表
-function getSeList() {
-    var se_list_local = Cookies.get('se_list');
-    if (se_list_local !== "{}" && se_list_local) {
-        return JSON.parse(se_list_local);
-    } else {
-        setSeList(se_list_preinstall);
-        return se_list_preinstall;
-    }
-}
-
-// 设置搜索引擎列表
-function setSeList(se_list) {
-    if (se_list) {
-        Cookies.set('se_list', se_list, {
-            expires: 36500
-        });
-        return true;
-    }
-    return false;
-}
-
-// 获得默认搜索引擎
-function getSeDefault() {
-    var se_default = Cookies.get('se_default');
-    return se_default ? se_default : "1";
-}
-
 //背景图片
 var bg_img_preinstall = {
     "type": "2", // 1:使用主题默认的背景图片 2:关闭背景图片 3:使用自定义的背景图片
@@ -182,10 +78,11 @@ var bg_img_preinstall = {
 };
 
 // 获取背景图片
-function getBgImg() {
-    var bg_img_local = Cookies.get('bg_img');
+async function getBgImg() {
+    const result = await chrome.storage.sync.get('bg_img');
+    var bg_img_local = result['bg_img'];
     if (bg_img_local && bg_img_local !== "{}") {
-        return JSON.parse(bg_img_local);
+        return bg_img_local;
     } else {
         setBgImg(bg_img_preinstall);
         return bg_img_preinstall;
@@ -195,9 +92,7 @@ function getBgImg() {
 // 设置背景图片
 function setBgImg(bg_img) {
     if (bg_img) {
-        Cookies.set('bg_img', bg_img, {
-            expires: 36500
-        });
+        chrome.storage.sync.set({ bg_img });
         return true;
     }
     return false;
@@ -205,9 +100,8 @@ function setBgImg(bg_img) {
 
 // 设置-壁纸
 //$('#bg').attr('src','https://api.dujin.org/bing/1920.php')
-function setBgImgInit() {
-    var bg_img = getBgImg();
-    $("input[name='wallpaper-type'][value=" + bg_img["type"] + "]").click();
+async function setBgImgInit() {
+    var bg_img = await getBgImg();
     if (bg_img["type"] === "5") {
         $("#wallpaper-url").val(bg_img["path"]);
         $("#wallpaper-button").fadeIn(100);
@@ -237,10 +131,10 @@ function setBgImgInit() {
             $('#bg').attr('src', 'https://api.dujin.org/bing/1920.php') //必应每日
             break;
         case "3":
-            $('#bg').attr('src', 'https://api.dujin.org/pic/fengjing') //随机风景
+            $('#bg').attr('src', 'https://tu.ltyuanfang.cn/api/fengjing.php') //随机风景
             break;
         case "4":
-            $('#bg').attr('src', 'https://www.dmoe.cc/random.php') //随机二次元
+            $('#bg').attr('src', 'https://t.mwm.moe/pc') //随机二次元
             break;
         case "5":
             $('#bg').attr('src', bg_img["path"]) //自定义
@@ -260,68 +154,12 @@ function blurWd() {
     $(".wd").val("");
 }
 
-// 搜索框数据加载
-function searchData() {
-    var se_default = getSeDefault();
-    var se_list = getSeList();
-    var defaultSe = se_list[se_default];
-    if (defaultSe) {
-        $(".search").attr("action", defaultSe["url"]);
-        $("#icon-se").attr("class", defaultSe["icon"]);
-        $(".wd").attr("name", defaultSe["name"]);
-    }
-
-    // 判断窗口大小，添加输入框自动完成
-    // var wid = $("body").width();
-    // if (wid < 640) {
-    //     $(".wd").attr('autocomplete', 'off');
-    // } else {
-    //     $(".wd").focus();
-    //     focusWd();
-    // }
-}
-
-// 搜索引擎列表加载
-function seList() {
-    var html = "";
-    var se_list = getSeList();
-    for (var i in se_list) {
-        html += `<div class='se-li' data-url='${se_list[i]["url"]}' data-name='${se_list[i]["name"]}' data-icon='${se_list[i]["icon"]}'>
-        <a class='se-li-text'><i id='icon-sou-list' class='${se_list[i]["icon"]}'></i><span>${se_list[i]["title"]}</span></a></div>`;
-    }
-    $(".search-engine-list").html(html);
-}
-
-// 设置-搜索引擎列表加载
-function setSeInit() {
-    var se_default = getSeDefault();
-    var se_list = getSeList();
-    var html = "";
-    for (var i in se_list) {
-        var tr = `<div class='se_list_div'><div class='se_list_num'>${i}</div>`;
-        if (i === se_default) {
-            tr = `<div class='se_list_div'><div class='se_list_num'>
-            <i class='iconfont icon-home'></i></div>`;
-        }
-        tr += `<div class='se_list_name'>${se_list[i]["title"]}</div>
-        <div class='se_list_button'>
-        <button class='set_se_default' value='${i}' style='border-radius: 8px 0px 0px 8px;'>
-        <i class='iconfont icon-home'></i></button>
-        <button class='edit_se' value='${i}'>
-        <i class='iconfont icon-xiugai'></i></button>
-        <button class='delete_se' value='${i}' style='border-radius: 0px 8px 8px 0px;'>
-        <i class='iconfont icon-delete'></i></button></div>
-        </div>`;
-        html += tr;
-    }
-    $(".se_list_table").html(html);
-}
-
 // 获取快捷方式列表
-function getQuickList() {
-    var quick_list_local = Cookies.get('quick_list');
+async function getQuickList() {
+    const result = await chrome.storage.sync.get('quick_list');
+    var quick_list_local = result['quick_list'];
     if (quick_list_local !== "{}" && quick_list_local) {
-        return JSON.parse(quick_list_local);
+        return quick_list_local;
     } else {
         setQuickList(quick_list_preinstall);
         return quick_list_preinstall;
@@ -331,18 +169,16 @@ function getQuickList() {
 // 设置快捷方式列表
 function setQuickList(quick_list) {
     if (quick_list) {
-        Cookies.set('quick_list', quick_list, {
-            expires: 36500
-        });
+        chrome.storage.sync.set({ quick_list });
         return true;
     }
     return false;
 }
 
 // 快捷方式数据加载
-function quickData() {
+async function quickData() {
     var html = "";
-    var quick_list = getQuickList();
+    var quick_list = await getQuickList();
     for (var i in quick_list) {
         html += `<div class="quick">
                     <a href="${quick_list[i]['url']}" target="_blank">${quick_list[i]['title']}</a>
@@ -352,8 +188,8 @@ function quickData() {
 }
 
 // 设置-快捷方式加载
-function setQuickInit() {
-    var quick_list = getQuickList();
+async function setQuickInit() {
+    var quick_list = await getQuickList();
     var html = "";
     for (var i in quick_list) {
         tr = `
@@ -422,8 +258,6 @@ function closeSet() {
         "display": "none",
     });
 
-    // 刷新主页数据
-    seList();
     quickData();
 }
 
@@ -463,18 +297,6 @@ function closeBox() {
     });
 }
 
-//显示设置搜索引擎列表
-function showSe() {
-    $(".se_list").show();
-    $(".se_add_preinstall").show();
-}
-
-//隐藏设置搜索引擎列表
-function hideSe() {
-    $(".se_list").hide();
-    $(".se_add_preinstall").hide();
-}
-
 //显示设置快捷方式列表
 function showQuick() {
     $(".quick_list").show();
@@ -490,35 +312,11 @@ function hideQuick() {
 
 $(document).ready(function () {
 
-    // 搜索框数据加载
-    searchData();
-
-    // 搜索引擎列表加载
-    seList();
-
     // 快捷方式数据加载
     quickData();
 
     // 壁纸数据加载
     setBgImgInit();
-
-    // 点击事件
-    $(document).on('click', function (e) {
-        // 选择搜索引擎点击
-        if ($(".search-engine").is(":hidden") && $(".se").is(e.target) || $(".search-engine").is(":hidden") && $("#icon-se").is(e.target)) {
-            if ($(".se").is(e.target) || $("#icon-se").is(e.target)) {
-                //获取宽度
-                $(".search-engine").css("width", $('.sou').width() - 30);
-                //出现动画
-                $(".search-engine").slideDown(160);
-            }
-        } else {
-            if (!$(".search-engine").is(e.target) && $(".search-engine").has(e.target).length === 0) {
-                $(".search-engine").slideUp(160);
-            }
-        }
-
-    });
 
     // 时间点击
     $("#time_text").click(function () {
@@ -529,28 +327,6 @@ $(document).ready(function () {
         } else {
             openBox();
         }
-    });
-
-    // 搜索引擎列表点击
-    $(".search-engine-list").on("click", ".se-li", function () {
-        var url = $(this).attr('data-url');
-        var name = $(this).attr('data-name');
-        var icon = $(this).attr('data-icon');
-        $(".search").attr("action", url);
-        $(".wd").attr("name", name);
-        $("#icon-se").attr("class", icon);
-        $(".search-engine").slideUp(160);
-    });
-
-    // 搜索引擎列表点击
-    $(".search-engine-list").on("click", ".se-li", function () {
-        var url = $(this).attr('data-url');
-        var name = $(this).attr('data-name');
-        var icon = $(this).attr('data-icon');
-        $(".search").attr("action", url);
-        $(".wd").attr("name", name);
-        $("#icon-se").attr("class", icon);
-        $(".search-engine").slideUp(160);
     });
 
     // 搜索框点击事件
@@ -569,6 +345,15 @@ $(document).ready(function () {
         blurWd();
         closeSet();
     });
+
+    // 搜索
+    $("form.search").on('submit', function (event) {
+        event.preventDefault();
+        const target = new FormData(event.target);
+        const query = target.get('wd').trim();
+        chrome.search.query({ text: query });
+    });
+
     // 菜单点击
     $("#menu").click(function () {
         if ($(this).attr("class") === "on") {
@@ -577,7 +362,6 @@ $(document).ready(function () {
             openSet();
 
             // 设置内容加载
-            setSeInit(); //搜索引擎设置
             setQuickInit(); //快捷方式设置
         }
     });
@@ -587,127 +371,11 @@ $(document).ready(function () {
         openSet();
 
         // 设置内容加载
-        setSeInit(); //搜索引擎设置
         setQuickInit(); //快捷方式设置
 
         //添加快捷方式
         $("#set-quick-menu").trigger('click');
         $(".set_quick_list_add").trigger('click');
-    });
-
-    // 修改默认搜索引擎
-    $(".se_list_table").on("click", ".set_se_default", function () {
-        var name = $(this).val();
-        Cookies.set('se_default', name, {
-            expires: 36500
-        });
-        iziToast.show({
-            timeout: 8000,
-            message: '是否设置为默认搜索引擎？',
-            buttons: [
-                ['<button>确认</button>', function (instance, toast) {
-                    setSeInit();
-                    instance.hide({
-                        transitionOut: 'flipOutX',
-                    }, toast, 'buttonName');
-                    iziToast.show({
-                        message: '设置成功'
-                    });
-                    setTimeout(function () {
-                        window.location.reload()
-                    }, 1000);
-                }, true],
-                ['<button>取消</button>', function (instance, toast) {
-                    instance.hide({
-                        transitionOut: 'flipOutX',
-                    }, toast, 'buttonName');
-                }]
-            ]
-        });
-    });
-
-    // 搜索引擎添加
-    $(".set_se_list_add").click(function () {
-        $(".se_add_content input").val("");
-
-        hideSe();
-        $(".se_add_content").show();
-    });
-
-    // 搜索引擎保存
-    $(".se_add_save").click(function () {
-        var key_inhere = $(".se_add_content input[name='key_inhere']").val();
-        var key = $(".se_add_content input[name='key']").val();
-        var title = $(".se_add_content input[name='title']").val();
-        var url = $(".se_add_content input[name='url']").val();
-        var name = $(".se_add_content input[name='name']").val();
-        //var icon = $(".se_add_content input[name='icon']").val();
-        var icon = "iconfont icon-wangluo";
-
-        var num = /^\+?[1-9][0-9]*$/;
-        if (!num.test(key)) {
-            iziToast.show({
-                timeout: 2000,
-                message: '序号 ' + key + ' 不是正整数'
-            });
-            return;
-        }
-
-        var se_list = getSeList();
-
-        if (se_list[key]) {
-            iziToast.show({
-                timeout: 8000,
-                message: '搜索引擎 ' + key + ' 已有数据，是否覆盖？',
-                buttons: [
-                    ['<button>确认</button>', function (instance, toast) {
-                        se_list[key] = {
-                            title: title,
-                            url: url,
-                            name: name,
-                            icon: icon,
-                        };
-                        setSeList(se_list);
-                        setSeInit();
-                        $(".se_add_content").hide();
-                        //显示列表
-                        showSe();
-
-                        instance.hide({
-                            transitionOut: 'flipOutX',
-                        }, toast, 'buttonName');
-                        iziToast.show({
-                            message: '覆盖成功'
-                        });
-                    }, true],
-                    ['<button>取消</button>', function (instance, toast) {
-                        instance.hide({
-                            transitionOut: 'flipOutX',
-                        }, toast, 'buttonName');
-                    }]
-                ]
-            });
-            return;
-        }
-
-        if (key_inhere && key !== key_inhere) {
-            delete se_list[key_inhere];
-        }
-
-        se_list[key] = {
-            title: title,
-            url: url,
-            name: name,
-            icon: icon,
-        };
-        setSeList(se_list);
-        setSeInit();
-        iziToast.show({
-            timeout: 2000,
-            message: '添加成功'
-        });
-        $(".se_add_content").hide();
-        showSe();
     });
 
     // 关闭表单
@@ -716,90 +384,6 @@ $(document).ready(function () {
 
         //显示列表
         showSe();
-    });
-
-    // 搜索引擎修改
-    $(".se_list").on("click", ".edit_se", function () {
-
-        var se_list = getSeList();
-        var key = $(this).val();
-        $(".se_add_content input[name='key_inhere']").val(key);
-        $(".se_add_content input[name='key']").val(key);
-        $(".se_add_content input[name='title']").val(se_list[key]["title"]);
-        $(".se_add_content input[name='url']").val(se_list[key]["url"]);
-        $(".se_add_content input[name='name']").val(se_list[key]["name"]);
-        // $(".se_add_content input[name='icon']").val("iconfont icon-Earth");
-
-        //隐藏列表
-        hideSe();
-
-        $(".se_add_content").show();
-    });
-
-    // 搜索引擎删除
-    $(".se_list").on("click", ".delete_se", function () {
-        var se_default = getSeDefault();
-        var key = $(this).val();
-        if (key == se_default) {
-            iziToast.show({
-                message: '默认搜索引擎不可删除'
-            });
-        } else {
-            iziToast.show({
-                timeout: 8000,
-                message: '搜索引擎 ' + key + ' 是否删除？',
-                buttons: [
-                    ['<button>确认</button>', function (instance, toast) {
-                        var se_list = getSeList();
-                        delete se_list[key];
-                        setSeList(se_list);
-                        setSeInit();
-                        instance.hide({
-                            transitionOut: 'flipOutX',
-                        }, toast, 'buttonName');
-                        iziToast.show({
-                            message: '删除成功'
-                        });
-                    }, true],
-                    ['<button>取消</button>', function (instance, toast) {
-                        instance.hide({
-                            transitionOut: 'flipOutX',
-                        }, toast, 'buttonName');
-                    }]
-                ]
-            });
-        }
-    });
-
-    // 恢复预设搜索引擎
-    $(".set_se_list_preinstall").click(function () {
-        iziToast.show({
-            timeout: 8000,
-            message: '现有搜索引擎数据将被清空',
-            buttons: [
-                ['<button>确认</button>', function (instance, toast) {
-                    setSeList(se_list_preinstall);
-                    Cookies.set('se_default', 1, {
-                        expires: 36500
-                    });
-                    setSeInit();
-                    instance.hide({
-                        transitionOut: 'flipOutX',
-                    }, toast, 'buttonName');
-                    iziToast.show({
-                        message: '重置成功'
-                    });
-                    setTimeout(function () {
-                        window.location.reload()
-                    }, 1000);
-                }, true],
-                ['<button>取消</button>', function (instance, toast) {
-                    instance.hide({
-                        transitionOut: 'flipOutX',
-                    }, toast, 'buttonName');
-                }]
-            ]
-        });
     });
 
     // 设置-快捷方式添加
@@ -812,7 +396,7 @@ $(document).ready(function () {
     });
 
     // 设置-快捷方式保存
-    $(".quick_add_save").click(function () {
+    $(".quick_add_save").click(async function () {
         var key_inhere = $(".quick_add_content input[name='key_inhere']").val();
         var key = $(".quick_add_content input[name='key']").val();
         var title = $(".quick_add_content input[name='title']").val();
@@ -828,8 +412,7 @@ $(document).ready(function () {
             return;
         }
 
-        var quick_list = getQuickList();
-
+        var quick_list = await getQuickList();
         if (quick_list[key]) {
             iziToast.show({
                 timeout: 8000,
@@ -923,9 +506,9 @@ $(document).ready(function () {
     });
 
     // 快捷方式修改
-    $(".quick_list").on("click", ".edit_quick", function () {
+    $(".quick_list").on("click", ".edit_quick", async function () {
 
-        var quick_list = getQuickList();
+        var quick_list = await getQuickList();
         var key = $(this).val();
         $(".quick_add_content input[name='key_inhere']").val(key);
         $(".quick_add_content input[name='key']").val(key);
@@ -948,8 +531,8 @@ $(document).ready(function () {
             timeout: 8000,
             message: '快捷方式 ' + key + ' 是否删除？',
             buttons: [
-                ['<button>确认</button>', function (instance, toast) {
-                    var quick_list = getQuickList();
+                ['<button>确认</button>', async function (instance, toast) {
+                    var quick_list = await getQuickList();
                     delete quick_list[key];
                     setQuickList(quick_list);
                     setQuickInit();
@@ -971,9 +554,9 @@ $(document).ready(function () {
     });
 
     // 壁纸设置
-    $("#wallpaper").on("click", ".set-wallpaper", function () {
+    $("#wallpaper").on("click", ".set-wallpaper", async function () {
         var type = $(this).val();
-        var bg_img = getBgImg();
+        var bg_img = await getBgImg();
         bg_img["type"] = type;
 
         if (type === "1") {
@@ -1020,7 +603,7 @@ $(document).ready(function () {
     });
 
     // 自定义壁纸设置保存
-    $(".wallpaper_save").click(function () {
+    $(".wallpaper_save").click(async function () {
         var url = $("#wallpaper-url").val();
         var reg = /^http(s)?:\/\/(([\w-]+\.)+[\w-]|localhost)+(:[0-9]{1,5})?(\/[\w- ./?%&=]*)?$/g;
         if (!reg.test(url)) {
@@ -1028,7 +611,7 @@ $(document).ready(function () {
                 message: '请输入正确的链接',
             });
         } else {
-            var bg_img = getBgImg();
+            var bg_img = await getBgImg();
             bg_img["type"] = "5";
             bg_img["path"] = url;
             setBgImg(bg_img);
@@ -1039,8 +622,8 @@ $(document).ready(function () {
     });
 
     // 我的数据导出
-    $("#my_data_out").click(function () {
-        var cookies = Cookies.get();
+    $("#my_data_out").click(async function () {
+        var cookies = await chrome.storage.sync.get();
         var json = JSON.stringify(cookies);
         download("Snavigation-back-up-" + $.now() + ".json", json);
         iziToast.show({
@@ -1092,9 +675,7 @@ $(document).ready(function () {
                 buttons: [
                     ['<button>确认</button>', function (instance, toast) {
                         for (var key in mydata) {
-                            Cookies.set(key, mydata[key], {
-                                expires: 36500
-                            });
+                            chrome.storage.sync.set({ [key]: mydata[key] });
                         }
                         instance.hide({
                             transitionOut: 'flipOutX',

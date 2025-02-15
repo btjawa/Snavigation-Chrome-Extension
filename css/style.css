@@ -152,12 +152,6 @@ img.error {
     transition: ease 0.3s !important;
 }
 
-/*搜索引擎按钮*/
-.onsearch #icon-se {
-    color: var(--main-text-form-color) !important;
-    transition: ease 0.5s;
-}
-
 /*搜索按钮*/
 .onsearch #icon-sou {
     color: var(--main-text-form-color) !important;
@@ -168,12 +162,6 @@ img.error {
 .onsearch .tool-all {
     transform: translateY(-140%) !important;
 }
-
-/*搜索引擎选择上移*/
-.onsearch .search-engine {
-    transform: translateY(-38%) !important;
-}
-
 
 /*时间*/
 .tool-all {
@@ -264,6 +252,7 @@ img.error {
     align-items: center;
     width: 100%;
     height: 43px;
+    padding-right: 60px;
     border-radius: 30px;
     color: var(--main-text-color);
     background-color: var(--main-background-color);
@@ -288,7 +277,6 @@ img.error {
     /* background-color: transparent; */
 }
 
-.sou form .se,
 .sou form .s {
     width: 40px;
     height: 40px;
@@ -299,32 +287,20 @@ img.error {
     align-items: center;
 }
 
-#icon-se,
 #icon-sou {
     font-size: 1.25rem;
     color: #efefef;
 }
 
-.sou form .se {
-    transition: 0.3s;
-    border-radius: 0px 30px 30px 0px;
-}
-
-.sou form .se:hover {
-    transition: 0.3s;
-    background: var(--main-background-color);
-    border-radius: 0px 30px 30px 0px;
-}
-
 .sou-button {
     transition: 0.3s;
-    border-radius: 30px 0px 0px 30px;
+    border-radius: 0px 30px 30px 0px;
 }
 
 .sou-button:hover {
     transition: 0.3s;
     background: var(--main-background-color);
-    border-radius: 30px 0px 0px 30px;
+    border-radius: 0px 30px 30px 0px;
 }
 
 .all-search input::-webkit-input-placeholder {
@@ -340,73 +316,6 @@ img.error {
 .all-search input:-ms-input-placeholder {
     color: var(--main-text-color);
     text-align: center;
-}
-
-/*切换搜索引擎*/
-.search-engine {
-    position: absolute;
-    margin-top: 10px;
-    margin-left: 5px;
-    padding: 10px;
-    color: var(--main-text-color);
-    background-color: var(--main-background-color);
-    box-shadow: var(--main-search-shadow);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    display: none;
-    z-index: 999;
-    animation: fade;
-    -webkit-animation: fade 0.5s;
-    -moz-animation: fade 0.5s;
-    -o-animation: fade 0.5s;
-    -ms-animation: fade 0.5s;
-}
-
-.search-engine-list {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    flex-wrap: wrap;
-    height: 152px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.se-li {
-    flex: 1;
-    width: 23%;
-    min-width: 23%;
-    max-width: 23%;
-    width: 100%;
-    padding: 8px 0px;
-    margin: 1%;
-    border-radius: 8px;
-    transition: 0.3s;
-    background: var(--main-background-color);
-}
-
-.se-li:hover {
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 8px;
-    background-color: var(--main-background-hover-color);
-}
-
-.se-li-text {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-.se-li-text span {
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
 }
 
 /*书签及设置*/
@@ -676,7 +585,6 @@ img.error {
     background: var(--main-button-active-color);
 }
 
-.se_list,
 .se_add_preinstall,
 .se_add_preinstalls,
 .quick_list,
@@ -753,21 +661,18 @@ input[type="number"] {
 }
 
 /*快捷方式和搜索引擎设置*/
-.quick_list,
-.se_list {
+.quick_list {
     height: 260px;
     overflow-y: auto;
 }
 
-.quick_list_table,
-.se_list_table {
+.quick_list_table {
     display: flex;
     flex-direction: column;
     margin: 0px 10px;
 }
 
-.quick_list_div,
-.se_list_div {
+.quick_list_div {
     height: 40px;
     display: flex;
     flex-direction: row;
@@ -779,14 +684,12 @@ input[type="number"] {
     transition: 0.3s;
 }
 
-.quick_list_div:hover,
-.se_list_div:hover {
+.quick_list_div:hover {
     background: var(--main-background-hover-color);
     transition: 0.3s;
 }
 
-.quick_list_div_num,
-.se_list_num {
+.quick_list_div_num {
     height: 40px;
     width: 40px;
     min-width: 40px;
@@ -797,8 +700,7 @@ input[type="number"] {
     border-radius: 8px;
 }
 
-.quick_list_div_name,
-.se_list_name {
+.quick_list_div_name {
     width: 100%;
     margin-left: 10px;
     overflow: hidden;
@@ -806,8 +708,7 @@ input[type="number"] {
     white-space: nowrap;
 }
 
-.quick_list_div_button,
-.se_list_button {
+.quick_list_div_button {
     height: 40px;
     border-radius: 8px;
     display: flex;
