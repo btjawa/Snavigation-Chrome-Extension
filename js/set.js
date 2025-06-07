@@ -131,10 +131,10 @@ async function setBgImgInit() {
             $('#bg').attr('src', 'https://api.dujin.org/bing/1920.php') //必应每日
             break;
         case "3":
-            $('#bg').attr('src', 'https://tu.ltyuanfang.cn/api/fengjing.php') //随机风景
+            $('#bg').attr('src', 'https://api.dujin.org/pic/fengjing') //随机风景
             break;
         case "4":
-            $('#bg').attr('src', 'https://t.mwm.moe/pc') //随机二次元
+            $('#bg').attr('src', 'https://www.loliapi.com/acg/pc') //随机二次元
             break;
         case "5":
             $('#bg').attr('src', bg_img["path"]) //自定义
@@ -576,7 +576,7 @@ $(document).ready(function () {
         }
 
         if (type === "3") {
-            $('#wallpaper_text').html("显示随机风景图，每次刷新后更换，刷新页面以生效 | API @ 小歪");
+            $('#wallpaper_text').html("显示随机风景图，每次刷新后更换，刷新页面以生效 | API @ 缙哥哥");
             setBgImg(bg_img);
             iziToast.show({
                 message: '壁纸设置成功，刷新生效',
@@ -584,7 +584,7 @@ $(document).ready(function () {
         }
 
         if (type === "4") {
-            $('#wallpaper_text').html("显示随机二次元图，每次刷新后更换，刷新页面以生效 | API @ 小歪");
+            $('#wallpaper_text').html("显示随机二次元图，每次刷新后更换，刷新页面以生效 | API @ LoliApi");
             setBgImg(bg_img);
             iziToast.show({
                 message: '壁纸设置成功，刷新生效',
