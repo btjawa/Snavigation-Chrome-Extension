@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Snavigation-Chrome",
-    "version": "1.2",
+    "version": "1.3",
     "description": "Snavigation 一个简约的起始页",
     "icons": {
         "32": "img/icon/favicon_32.png",
